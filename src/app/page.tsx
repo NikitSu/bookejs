@@ -87,10 +87,6 @@ export default function Home() {
       {/* Сам таббар, закреплённый внизу экрана */}
       <Tabbar
         style={{
-          position: 'fixed',
-          left: 0,
-          right: 0,
-          bottom: 0,
           // закруглённые верхние углы
           borderStartStartRadius: 40,
           borderStartEndRadius: 40,
