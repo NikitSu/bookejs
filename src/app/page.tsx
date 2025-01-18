@@ -67,22 +67,61 @@ export default function Home() {
   const t = useTranslations('i18n');
   const [currentTab, setCurrentTab] = useState(tabs[0].id);
 
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  // Текст, который показываем в подсказке
+  const tooltipText = 'Если не успеешь закрыть, то вода замёрзнет. Не забудь вернуться!';
+
   return (
+    <div
+      onClick={() => {
+        if (showTooltip) {
+          setShowTooltip(false);
+        }
+      }}
+      style={{ position: 'relative', minHeight: '100vh' }}
+    >
     <Page back={false}>
 
       {/* Иконка, закреплённая справа внизу, над таббаром */}
       <IconButton
-        mode="bezeled"
+        mode="gray"
         size="s"
         style={{
           position: 'fixed', // или 'absolute', если у вас есть родитель с position: relative
-          bottom: '120px',    // отступ от низа экрана (чуть выше таббара, который на 0)
-          right: '80px',     // отступ справа
+          bottom: 120,    // отступ от низа экрана (чуть выше таббара, который на 0)
+          right: 80,     // отступ справа
           zIndex: 9999       // чтобы кнопка была поверх всего
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowTooltip(!showTooltip);
         }}
       >
         <Icon20QuestionMark />
       </IconButton>
+
+      {showTooltip && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: 180,    // ещё выше, чем кнопка
+              right: 20,
+              zIndex: 10000,
+              maxWidth: 200,
+              background: '#69C9F9', 
+              color: 'var(--tgui--text_primary)',
+              padding: '8px 12px',
+              borderRadius: 12,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+              // Можно настроить шрифт, отступы и т.д.
+            }}
+            // Останавливаем всплытие клика внутри бабла
+            onClick={(e) => e.stopPropagation()}
+          >
+            {tooltipText}
+          </div>
+        )}
 
       {/* Сам таббар, закреплённый внизу экрана */}
       <Tabbar
@@ -90,10 +129,7 @@ export default function Home() {
           // закруглённые верхние углы
           borderStartStartRadius: 40,
           borderStartEndRadius: 40,
-          // при желании можно добавить background
-          // backgroundColor: 'var(--tgui--secondary_bg_color)',
-          // или тень
-          // boxShadow: '0 -2px 8px rgba(0,0,0,0.2)'
+          paddingBottom: 15,
         }}
       >
         {tabs.map(({ id, text, Icon }) => (
@@ -108,5 +144,6 @@ export default function Home() {
         ))}
       </Tabbar>
     </Page>
+    </div>
   );
 }
